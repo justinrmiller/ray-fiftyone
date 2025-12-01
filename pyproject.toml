@@ -1,0 +1,12 @@
+[project]
+name = "ray-fiftyone"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = "==3.12.11"
+dependencies = [
+    "fiftyone>=1.10.0",
+    "pre-commit>=4.5.0",
+    "pyarrow>=22.0.0",
+    "ray>=2.52.1",
+]
