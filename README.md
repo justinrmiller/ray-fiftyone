@@ -15,6 +15,8 @@ Ray Data integration for FiftyOne datasets, enabling distributed processing of c
 
 - **Distributed Reading**: Parallel loading of FiftyOne datasets with configurable parallelism
 - **Distributed Writing**: Concurrent writes to FiftyOne datasets from Ray Data
+- **Cloud Storage Support**: Works seamlessly with S3, Google Cloud Storage, and Azure Blob Storage
+- **Remote MongoDB**: Connect to FiftyOne databases hosted in MongoDB Atlas or self-hosted instances
 - **Field Selection**: Choose specific fields to include when reading datasets
 - **Label Serialization**: Automatic serialization/deserialization of FiftyOne label types
 - **View Stages**: Apply FiftyOne view stages (filtering, sorting) during data loading
@@ -28,7 +30,9 @@ This project uses [uv](https://github.com/astral-sh/uv) for package management. 
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-Then install the package in editable mode:
+### Basic Installation
+
+Install the core package:
 
 ```bash
 # Clone the repository
@@ -39,13 +43,32 @@ cd ray-fiftyone
 uv pip install -e .
 ```
 
-### Development Setup
-
-For development, install pre-commit hooks:
+### Installation with Optional Features
 
 ```bash
-# Install pre-commit
-uv pip install pre-commit
+# Install with cloud storage support (S3, GCS, Azure)
+uv pip install -e ".[cloud]"
+
+# Install with ML dependencies (PyTorch, Transformers)
+uv pip install -e ".[ml]"
+
+# Install with test dependencies
+uv pip install -e ".[test]"
+
+# Install everything
+uv pip install -e ".[all]"
+
+# Combine multiple extras
+uv pip install -e ".[cloud,ml]"
+```
+
+### Development Setup
+
+For development, install development tools and pre-commit hooks:
+
+```bash
+# Install development dependencies
+uv pip install -e ".[dev]"
 
 # Install git hooks
 pre-commit install
@@ -107,6 +130,34 @@ This pattern is useful for:
 - Processing and transforming large datasets
 - Enriching datasets with embeddings or metadata
 - Creating curated subsets for model training
+
+### Example 3: Object Detection with DETR
+
+Production-ready example using a pre-trained DETR model:
+
+```bash
+# Install ML dependencies
+uv pip install -e ".[ml]"
+
+# For cloud storage support, also install:
+uv pip install -e ".[cloud]"
+
+# Or install both at once:
+uv pip install -e ".[ml,cloud]"
+
+# Run detection
+uv run python examples/object_detection_example.py
+```
+
+This script shows a complete ML workflow:
+- Using Hugging Face's DETR model for object detection
+- Processing images in batches for efficiency
+- Converting model outputs to FiftyOne format
+- Storing predictions with confidence scores and bounding boxes
+
+This pattern can be adapted for any detection, segmentation, or classification model.
+
+**Cloud Support:** All examples support cloud-hosted datasets. See [examples/CLOUD_SETUP.md](examples/CLOUD_SETUP.md) for configuration details.
 
 ## Usage
 
@@ -231,10 +282,41 @@ ray-fiftyone/
 
 ## Requirements
 
-- Python 3.12.11
+### Core Dependencies
+
+- Python >= 3.12
 - fiftyone >= 1.10.0
-- ray >= 2.52.1
+- ray[data] >= 2.52.1
 - pyarrow >= 22.0.0
+
+### Optional Dependencies
+
+Install using extras (e.g., `uv pip install -e ".[cloud]"`):
+
+**Development** (`[dev]`):
+- pre-commit >= 4.5.0
+- ruff >= 0.1.0
+
+**Testing** (`[test]`):
+- pytest >= 8.0.0
+- pytest-cov >= 4.1.0
+- pytest-mock >= 3.12.0
+
+**Cloud Storage** (`[cloud]`):
+- s3fs >= 2024.0.0 (AWS S3)
+- gcsfs >= 2024.0.0 (Google Cloud Storage)
+- adlfs >= 2024.0.0 (Azure Blob Storage)
+- fsspec >= 2024.0.0 (Unified filesystem)
+- requests >= 2.31.0 (HTTP/HTTPS)
+
+**Machine Learning** (`[ml]`):
+- torch >= 2.0.0
+- torchvision >= 0.15.0
+- transformers >= 4.30.0
+- pillow >= 10.0.0
+
+**All Features** (`[all]`):
+- Installs dev, test, cloud, and ml dependencies
 
 ## Testing
 
@@ -287,7 +369,7 @@ This project uses:
 
 Before submitting changes:
 
-1. Install development dependencies: `uv pip install -e ".[test]"`
+1. Install all dependencies: `uv pip install -e ".[all]"`
 2. Ensure pre-commit hooks pass: `pre-commit run --all-files`
 3. Run the test suite: `uv run pytest tests/ --cov=ray_fiftyone`
 4. Test your changes with the example scripts
