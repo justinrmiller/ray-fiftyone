@@ -43,25 +43,6 @@ cd ray-fiftyone
 uv pip install -e .
 ```
 
-### Installation with Optional Features
-
-```bash
-# Install with cloud storage support (S3, GCS, Azure)
-uv pip install -e ".[cloud]"
-
-# Install with ML dependencies (PyTorch, Transformers)
-uv pip install -e ".[ml]"
-
-# Install with test dependencies
-uv pip install -e ".[test]"
-
-# Install everything
-uv pip install -e ".[all]"
-
-# Combine multiple extras
-uv pip install -e ".[cloud,ml]"
-```
-
 ### Development Setup
 
 For development, install development tools and pre-commit hooks:
@@ -136,15 +117,6 @@ This pattern is useful for:
 Production-ready example using a pre-trained DETR model:
 
 ```bash
-# Install ML dependencies
-uv pip install -e ".[ml]"
-
-# For cloud storage support, also install:
-uv pip install -e ".[cloud]"
-
-# Or install both at once:
-uv pip install -e ".[ml,cloud]"
-
 # Run detection
 uv run python examples/object_detection_example.py
 ```
