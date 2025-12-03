@@ -236,18 +236,62 @@ ray-fiftyone/
 - ray >= 2.52.1
 - pyarrow >= 22.0.0
 
+## Testing
+
+This project includes a comprehensive test suite with high code coverage.
+
+### Running Tests
+
+Run the full test suite:
+
+```bash
+uv run pytest tests/
+```
+
+Run tests with verbose output:
+
+```bash
+uv run pytest tests/ -v
+```
+
+Run tests with coverage report:
+
+```bash
+uv run pytest tests/ --cov=ray_fiftyone --cov-report=term-missing
+```
+
+Generate HTML coverage report:
+
+```bash
+uv run pytest tests/ --cov=ray_fiftyone --cov-report=html
+# Open htmlcov/index.html in your browser
+```
+
+### Coverage Goals
+
+The project maintains high test coverage:
+- **Overall**: ~74%
+- **helpers.py**: ~94%
+- **data_sink.py**: ~82%
+- **data_source.py**: ~55%
+
+Note: Some integration code that directly interfaces with FiftyOne and Ray internals is intentionally untested to avoid excessive mocking complexity. These components are validated through the example scripts and integration testing.
+
 ## Contributing
 
 This project uses:
 - **uv** for package management
 - **pre-commit** for code quality (ruff, pyupgrade)
 - **ruff** for linting and formatting
+- **pytest** for testing with coverage tracking
 
 Before submitting changes:
 
-1. Ensure pre-commit hooks pass: `pre-commit run --all-files`
-2. Test your changes with the example scripts
-3. Update documentation as needed
+1. Install development dependencies: `uv pip install -e ".[test]"`
+2. Ensure pre-commit hooks pass: `pre-commit run --all-files`
+3. Run the test suite: `uv run pytest tests/ --cov=ray_fiftyone`
+4. Test your changes with the example scripts
+5. Update documentation as needed
 
 ## License
 
