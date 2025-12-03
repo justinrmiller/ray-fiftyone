@@ -293,10 +293,6 @@ Before submitting changes:
 4. Test your changes with the example scripts
 5. Update documentation as needed
 
-## License
-
-[Add your license here]
-
 ## Related Projects
 
 - [FiftyOne](https://github.com/voxel51/fiftyone) - Open-source tool for building high-quality datasets and computer vision models
